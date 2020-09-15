@@ -8,3 +8,10 @@ This is an example application built using Terraform to create the resources in 
 - AWS Elastic Beanstalk
 - Docker
 - Kafka (rapids architecture)
+
+<h2>Requirements</h2>
+Make sure you have already installed both Docker Engine and Docker Compose.
+
+<h2>Getting Started</h2>
+1. Run docker-compose up
+2. Enter http://localhost:5000/, you should seee the message "Hello World! I have been seen {n} times."
