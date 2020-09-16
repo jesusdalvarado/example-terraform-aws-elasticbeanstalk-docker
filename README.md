@@ -10,6 +10,7 @@ This is an example application built using Terraform to create the resources in 
 - Docker
 - Redis
 - Kafka (rapids architecture)
+- Github actions
 
 <h2>Requirements</h2>
 Make sure you have already installed both Docker Engine and Docker Compose.
