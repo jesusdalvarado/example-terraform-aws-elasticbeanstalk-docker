@@ -24,9 +24,18 @@ Make sure you have already installed both Docker Engine and Docker Compose.
 - Install aws client and configure it (e.g. using the command aws configure)
 - You need to create an S3 bucket called "mybucket-remote-terraform-state" in the region "us-west-2" before running terraform init , this is to use terraform remote state. This bucket has to be created manually in AWS because Terraform can't create it.
 - You also need to create a Dynamodb table (the name for primary partition key could be "LockID"). Make sure the region for this resource is also "us-west-2" otherwise you will see the error "Requested resource not found" during terraform init.
+- Terraform can reead directly from the configured credentials using aws configure, or you cna use an .env file like this
+
+        APPLICATION_NAME=myapp
+        AWS_ACCESS_KEY_ID=some_access_key
+        AWS_SECRET_ACCESS_KEY=some_secret_key
+        AWS_REGION=us-west-2
 
 <h2>To create resources in AWS using Terraform</h2>
 
 1. Run terraform init
 2. Run terraform plan
 3. Run terraform apply
+
+
+
