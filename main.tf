@@ -14,9 +14,14 @@ terraform {
   }
 }
 
+variable "AWS_REGION" {
+  # default = "us-west-2"
+  type = string
+}
+
 provider "aws" {
   profile = "default"
-  region  = "us-west-2"
+  region  = var.AWS_REGION
 }
 
 resource "aws_elastic_beanstalk_application" "tftest" {
