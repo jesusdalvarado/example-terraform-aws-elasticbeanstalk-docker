@@ -58,7 +58,7 @@ EOF
 resource "aws_elastic_beanstalk_environment" "prodenv" {
   name                = "tf-test-name"
   application         = aws_elastic_beanstalk_application.tftest.name
-  solution_stack_name = "64bit Amazon Linux 2 v3.1.0 running Ruby 2.7"
+  solution_stack_name = "64bit Amazon Linux 2 v3.1.1 running Python 3.7"
 
   setting {
     name = "IamInstanceProfile"
