@@ -39,3 +39,5 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      - run: echo "{{ secrets.DOCKERHUB_PASSWORD }}" | docker login https://docker.pkg.github.com -u "${{ secrets.DOCKERHUB_USENAME }}" --password-stdin
