@@ -55,10 +55,37 @@ resource "aws_iam_role" "role" {
 EOF
 }
 
+// Create release
+// With this aws_s3_bucket_object we can upload files to the s3 bucket
+resource "aws_s3_bucket_object" "object" {
+  bucket = "mybucket-remote-terraform-state"
+  key    = "Dockerrun.aws.json"
+  content = jsonencode({
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+      "Name": "docker.pkg.github.com/jesusdalvarado/example-terraform-aws-elasticbeanstalk-docker/jesus-image"
+    },
+    "Ports": [
+      {
+        "ContainerPort": 8080
+      }
+    ]
+  })
+}
+
+resource "aws_elastic_beanstalk_application_version" "default" {
+  name        = "tf-test-version-1"
+  application = aws_elastic_beanstalk_application.tftest.name
+  description = "application version created by terraform"
+  bucket      = aws_s3_bucket_object.object.bucket
+  key         = aws_s3_bucket_object.object.key
+}
+
 resource "aws_elastic_beanstalk_environment" "prodenv" {
   name                = "tf-test-name"
   application         = aws_elastic_beanstalk_application.tftest.name
-  solution_stack_name = "64bit Amazon Linux 2 v3.1.1 running Python 3.7"
+  solution_stack_name = "64bit Amazon Linux 2 v3.1.2 running Docker"
+  version_label       = aws_elastic_beanstalk_application_version.default.name
 
   setting {
     name = "IamInstanceProfile"
