@@ -18,7 +18,7 @@ Make sure you have already installed both Docker Engine and Docker Compose.
 <h2>Getting Started</h2>
 
 1. Run docker-compose up
-2. Enter http://localhost:5000/, you should see the message "Hello World! I have been seen {n} times."
+2. Enter http://localhost:8080/, you should see the message "Hello World! I have been seen {n} times."
 
 <h2>Requirements</h2>
 
