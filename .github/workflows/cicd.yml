@@ -40,4 +40,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - run: echo "{{ secrets.DOCKERHUB_PASSWORD }}" | docker login https://docker.pkg.github.com -u "${{ secrets.DOCKERHUB_USENAME }}" --password-stdin
+      - name: Build the stack
+        run: docker-compose -f docker-compose.yml up -d
+      # - run: |
+      #   echo "{{ secrets.DOCKERHUB_PASSWORD }}" | docker login https://docker.pkg.github.com -u "${{ secrets.DOCKERHUB_USENAME }}" --password-stdin
+      #   echo "hello"
