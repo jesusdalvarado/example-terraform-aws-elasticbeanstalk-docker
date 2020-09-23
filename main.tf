@@ -85,14 +85,16 @@ resource "aws_iam_policy_attachment" "test-attach" {
 
 
 // Create release
-// With this aws_s3_bucket_object we can upload files to the s3 bucket
+// With aws_s3_bucket_object we can upload files to the s3 bucket
 resource "aws_s3_bucket_object" "object" {
   bucket = "mybucket-remote-terraform-state"
   key    = "Dockerrun.aws.json"
   content = jsonencode({
     "AWSEBDockerrunVersion": "1",
     "Image": {
-      "Name": "docker.pkg.github.com/jesusdalvarado/example-terraform-aws-elasticbeanstalk-docker/jesus-image"
+      # "Name": "docker.pkg.github.com/jesusdalvarado/example-terraform-aws-elasticbeanstalk-docker/jesus-image:v1" // Using Github Package Registry (requires authentication)
+      # "Name": "alvaradojesus/deploying_aws_elastic_beanstalk:v1" // Using docker registry
+      "Name": "ghcr.io/jesusdalvarado/jesus-image:v1" // Using GitHub Container Registry
     },
     "Ports": [
       {
