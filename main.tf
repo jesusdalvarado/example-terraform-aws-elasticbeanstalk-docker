@@ -47,13 +47,42 @@ resource "aws_iam_role" "role" {
             "Principal": {
                "Service": "ec2.amazonaws.com"
             },
-            "Effect": "Allow",
-            "Sid": ""
+            "Effect": "Allow"
         }
     ]
 }
 EOF
 }
+
+// You could also use the arn "arn:aws:iam::aws:policy/AdministratorAccess" rather than creating this custom policy (same effect)
+resource "aws_iam_policy" "policy" {
+  name        = "test-policy"
+  description = "A test policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy_attachment" "test-attach" {
+  name       = "test-attachment"
+  roles      = [aws_iam_role.role.name]
+  policy_arn = aws_iam_policy.policy.arn
+  # policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
+
 
 // Create release
 // With this aws_s3_bucket_object we can upload files to the s3 bucket
