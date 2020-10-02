@@ -54,6 +54,7 @@ resource "aws_iam_role" "role" {
 EOF
 }
 
+// Creating iam_policy to provide permissions
 // You could also use the arn "arn:aws:iam::aws:policy/AdministratorAccess" rather than creating this custom policy (same effect)
 resource "aws_iam_policy" "policy" {
   name        = "test-policy"

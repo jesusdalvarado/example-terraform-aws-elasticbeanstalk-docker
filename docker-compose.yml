@@ -15,3 +15,5 @@ services:
       - TF_VAR_AWS_REGION=$AWS_REGION
     volumes:
       - ./:/app
+    command:
+      sh -c "terraform init && terraform plan"
