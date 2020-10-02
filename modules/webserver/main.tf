@@ -4,16 +4,16 @@ terraform {
 
 // Create EB app
 resource "aws_elastic_beanstalk_application" "webserver" {
-  name = var.service_name
+  name        = var.service_name
   description = var.service_description
 }
 
 // Create release
 // With aws_s3_bucket_object we can upload files to the s3 bucket
 resource "aws_s3_bucket_object" "object" {
-  bucket = "mybucket-remote-terraform-state"
-  key    = "Dockerrun.aws.json"
-  content = jsonencode({
+  bucket    = "mybucket-remote-terraform-state"
+  key       = "Dockerrun.aws.json"
+  content   = jsonencode({
     "AWSEBDockerrunVersion": "1",
     "Image": {
       # "Name": "docker.pkg.github.com/jesusdalvarado/example-terraform-aws-elasticbeanstalk-docker/jesus-image:v1" // Using Github Package Registry (requires authentication)
@@ -44,8 +44,8 @@ resource "aws_elastic_beanstalk_environment" "prodenv" {
   version_label       = aws_elastic_beanstalk_application_version.default.name
 
   setting {
-    name = "IamInstanceProfile"
-    namespace = "aws:autoscaling:launchconfiguration"
-    value = var.aws_iam_instance_profile
+    name        = "IamInstanceProfile"
+    namespace   = "aws:autoscaling:launchconfiguration"
+    value       = var.aws_iam_instance_profile
   }
 }

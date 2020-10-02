@@ -1,10 +1,10 @@
 terraform {
   backend "s3" {
-    bucket  = "mybucket-remote-terraform-state"
-    key     = "terraform.tfstate"
-    encrypt = true
-    dynamodb_table = "myapp-terraform-state-locks"
-    region = "us-west-2"
+    bucket          = "mybucket-remote-terraform-state"
+    key             = "terraform.tfstate"
+    encrypt         = true
+    dynamodb_table  = "myapp-terraform-state-locks"
+    region          = "us-west-2"
   }
 
   required_providers {
@@ -79,11 +79,11 @@ resource "aws_iam_policy_attachment" "test-attach" {
 }
 
 module "my_flask_webserver" {
-  source = "./modules/webserver"
   # Passing values of the variables into the module
-  docker_image = "ghcr.io/jesusdalvarado/jesus-image:v1"
-  service_name = "flask_web_server"
-  service_description = "Simple web server using Flask"
+  source                   = "./modules/webserver"
+  docker_image             = "ghcr.io/jesusdalvarado/jesus-image:v1"
+  service_name             = "flask_web_server"
+  service_description      = "Simple web server using Flask"
   aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
 }
 
