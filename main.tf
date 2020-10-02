@@ -24,11 +24,6 @@ provider "aws" {
   region  = var.AWS_REGION
 }
 
-resource "aws_elastic_beanstalk_application" "tftest" {
-  name          = "my-test"
-  description   = "some description"
-}
-
 resource "aws_iam_instance_profile" "test_profile" {
   name = "test_profile"
   role = aws_iam_role.role.name
@@ -83,45 +78,10 @@ resource "aws_iam_policy_attachment" "test-attach" {
   # policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-
-
-// Create release
-// With aws_s3_bucket_object we can upload files to the s3 bucket
-resource "aws_s3_bucket_object" "object" {
-  bucket = "mybucket-remote-terraform-state"
-  key    = "Dockerrun.aws.json"
-  content = jsonencode({
-    "AWSEBDockerrunVersion": "1",
-    "Image": {
-      # "Name": "docker.pkg.github.com/jesusdalvarado/example-terraform-aws-elasticbeanstalk-docker/jesus-image:v1" // Using Github Package Registry (requires authentication)
-      # "Name": "alvaradojesus/deploying_aws_elastic_beanstalk:v1" // Using docker registry
-      "Name": "ghcr.io/jesusdalvarado/jesus-image:v1" // Using GitHub Container Registry
-    },
-    "Ports": [
-      {
-        "ContainerPort": 8080
-      }
-    ]
-  })
-}
-
-resource "aws_elastic_beanstalk_application_version" "default" {
-  name        = "tf-test-version-1"
-  application = aws_elastic_beanstalk_application.tftest.name
-  description = "application version created by terraform"
-  bucket      = aws_s3_bucket_object.object.bucket
-  key         = aws_s3_bucket_object.object.key
-}
-
-resource "aws_elastic_beanstalk_environment" "prodenv" {
-  name                = "tf-test-name"
-  application         = aws_elastic_beanstalk_application.tftest.name
-  solution_stack_name = "64bit Amazon Linux 2 v3.1.2 running Docker"
-  version_label       = aws_elastic_beanstalk_application_version.default.name
-
-  setting {
-    name = "IamInstanceProfile"
-    namespace = "aws:autoscaling:launchconfiguration"
-    value = aws_iam_instance_profile.test_profile.name
-  }
+module "my_flask_webserver" {
+  source = "./modules/webserver"
+  # Passing values of the variables into the module
+  docker_image = "ghcr.io/jesusdalvarado/jesus-image:v1"
+  service_name = "flask_web_server"
+  service_description = "Simple web server using Flask"
 }
