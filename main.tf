@@ -84,4 +84,10 @@ module "my_flask_webserver" {
   docker_image = "ghcr.io/jesusdalvarado/jesus-image:v1"
   service_name = "flask_web_server"
   service_description = "Simple web server using Flask"
+  aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
 }
+
+// This is just an example output, reading from the child module. When running terraform apply this output will be printed, it is a way to inspect the values in the console
+ output "instance_data" {
+   value = module.my_flask_webserver.webserver
+ }
