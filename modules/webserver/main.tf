@@ -8,10 +8,21 @@ resource "aws_elastic_beanstalk_application" "webserver" {
   description = var.service_description
 }
 
+// Creating bucket where the docker images will be uploaded to
+resource "aws_s3_bucket" "bucket"{
+    bucket = "flask-webserver-bucket"
+    acl = "public-read"
+
+    tags = {
+        Name = "Flask Bucket"
+        Environment = "Production"
+    }
+}
+
 // Create release
 // With aws_s3_bucket_object we can upload files to the s3 bucket
 resource "aws_s3_bucket_object" "object" {
-  bucket    = "mybucket-remote-terraform-state"
+  bucket    = aws_s3_bucket.bucket.bucket
   key       = "Dockerrun.aws.json"
   content   = jsonencode({
     "AWSEBDockerrunVersion": "1",
@@ -23,14 +34,14 @@ resource "aws_s3_bucket_object" "object" {
     },
     "Ports": [
       {
-        "ContainerPort": 8080
+        "ContainerPort": 5000
       }
     ]
   })
 }
 
 resource "aws_elastic_beanstalk_application_version" "default" {
-  name        = "tf-test-version-1"
+  name        = "tf-test-version-2"
   application = aws_elastic_beanstalk_application.webserver.name
   description = "application version created by terraform"
   bucket      = aws_s3_bucket_object.object.bucket

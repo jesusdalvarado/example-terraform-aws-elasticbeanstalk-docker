@@ -87,7 +87,19 @@ module "my_flask_webserver" {
   aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
 }
 
+module "my_redis_server" {
+  source                   = "./modules/redis_server"
+  docker_image             = "ghcr.io/jesusdalvarado/redis-jesus:latest"
+  service_name             = "redis_server"
+  service_description      = "Redis DB"
+  aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
+}
+
 // This is just an example output, reading from the child module. When running terraform apply this output will be printed, it is a way to inspect the values in the console
- output "instance_data" {
-   value = module.my_flask_webserver.webserver
- }
+output "instance_data" {
+  value = module.my_flask_webserver.webserver
+}
+
+output "redis_instance_data" {
+  value = module.my_redis_server.redis_server
+}
