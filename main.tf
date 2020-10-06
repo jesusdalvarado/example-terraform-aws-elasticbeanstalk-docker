@@ -81,7 +81,7 @@ resource "aws_iam_policy_attachment" "test-attach" {
 module "my_flask_webserver" {
   # Passing values of the variables into the module
   source                   = "./modules/webserver"
-  docker_image             = "ghcr.io/jesusdalvarado/jesus-image:v1"
+  docker_image             = "ghcr.io/jesusdalvarado/jesus-image:latest"
   service_name             = "flask_web_server"
   service_description      = "Simple web server using Flask"
   aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name

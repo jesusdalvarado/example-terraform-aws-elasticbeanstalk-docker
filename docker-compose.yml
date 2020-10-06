@@ -3,9 +3,11 @@ services:
   web:
     build: .
     ports:
-      - "8080:5000"
+      - "5000:5000"
+    volumes:
+      - ./:/myapp
   redis:
-    image: "redis:alpine"
+    image: "ghcr.io/jesusdalvarado/redis-jesus:latest"
   terraform:
     image: "1mill/terraform-sops:alpine-2020-09-05T04-00-37"
     environment:
