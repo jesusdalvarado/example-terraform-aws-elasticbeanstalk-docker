@@ -78,6 +78,54 @@ resource "aws_iam_policy_attachment" "test-attach" {
   # policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic"
+
+  ingress {
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Allow SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Allow Redis"
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_tls"
+  }
+}
+
 module "my_flask_webserver" {
   # Passing values of the variables into the module
   source                   = "./modules/webserver"
@@ -85,6 +133,7 @@ module "my_flask_webserver" {
   service_name             = "flask_web_server"
   service_description      = "Simple web server using Flask"
   aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
+  security_group           = aws_security_group.allow_tls.name
 }
 
 module "my_redis_server" {
@@ -93,13 +142,22 @@ module "my_redis_server" {
   service_name             = "redis_server"
   service_description      = "Redis DB"
   aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
+  security_group           = aws_security_group.allow_tls.name
 }
 
 // This is just an example output, reading from the child module. When running terraform apply this output will be printed, it is a way to inspect the values in the console
-output "instance_data" {
+output "webserver_instance_data" {
   value = module.my_flask_webserver.webserver
 }
 
 output "redis_instance_data" {
   value = module.my_redis_server.redis_server
+}
+
+output "webserver_url" {
+  value = module.my_flask_webserver.webserver.cname
+}
+
+output "redis_url" {
+  value = module.my_redis_server.redis_server.cname
 }

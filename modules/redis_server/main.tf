@@ -58,4 +58,10 @@ resource "aws_elastic_beanstalk_environment" "prodenv" {
     namespace   = "aws:autoscaling:launchconfiguration"
     value       = var.aws_iam_instance_profile
   }
+
+  setting {
+    name = "SecurityGroups"
+    namespace = "aws:autoscaling:launchconfiguration"
+    value = var.security_group
+  }
 }

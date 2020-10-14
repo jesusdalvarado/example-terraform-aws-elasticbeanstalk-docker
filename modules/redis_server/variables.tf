@@ -14,6 +14,11 @@ variable "service_description" {
 }
 
 variable "aws_iam_instance_profile" {
-    type = string
+    type        = string
     description = "AWS IAM Instance Profile"
+}
+
+variable "security_group" {
+    type        = string
+    description = "AWS Security Group"
 }
