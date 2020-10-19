@@ -23,25 +23,12 @@ resource "aws_s3_bucket" "bucket"{
 // With aws_s3_bucket_object we can upload files to the s3 bucket
 resource "aws_s3_bucket_object" "object" {
   bucket    = aws_s3_bucket.bucket.bucket
-  key       = "Dockerrun.aws.json"
-  content   = jsonencode({
-    "AWSEBDockerrunVersion": "1",
-    "Image": {
-      # "Name": "docker.pkg.github.com/jesusdalvarado/example-terraform-aws-elasticbeanstalk-docker/jesus-image:v1" // Using Github Package Registry (requires authentication)
-      # "Name": "alvaradojesus/deploying_aws_elastic_beanstalk:v1" // Using docker registry
-      # "Name": "ghcr.io/jesusdalvarado/jesus-image:v1" // Using GitHub Container Registry
-      "Name": var.docker_image // This reads from ./variables.tf. The values in variables.tf are passed from the root main.tf
-    },
-    "Ports": [
-      {
-        "ContainerPort": 5000
-      }
-    ]
-  })
+  key       = "docker-compose.yml"
+  source    = "modules/webserver/docker-compose.yml"
 }
 
 resource "aws_elastic_beanstalk_application_version" "default" {
-  name        = "tf-test-version-2"
+  name        = "tf-test-version-3"
   application = aws_elastic_beanstalk_application.webserver.name
   description = "application version created by terraform"
   bucket      = aws_s3_bucket_object.object.bucket
@@ -51,7 +38,7 @@ resource "aws_elastic_beanstalk_application_version" "default" {
 resource "aws_elastic_beanstalk_environment" "prodenv" {
   name                = "tf-test-name"
   application         = aws_elastic_beanstalk_application.webserver.name
-  solution_stack_name = "64bit Amazon Linux 2 v3.1.2 running Docker"
+  solution_stack_name = "64bit Amazon Linux 2 v3.2.0 running Docker"
   version_label       = aws_elastic_beanstalk_application_version.default.name
 
   setting {
