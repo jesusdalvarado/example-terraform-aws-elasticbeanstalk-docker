@@ -22,3 +22,8 @@ variable "security_group" {
     type        = string
     description = "AWS Security Group"
 }
+
+variable "redis_url" {
+    type        = string
+    description = "URL used to connect to the Redis Database"
+}

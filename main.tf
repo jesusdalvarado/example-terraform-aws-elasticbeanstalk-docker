@@ -126,6 +126,15 @@ resource "aws_security_group" "allow_tls" {
   }
 }
 
+module "my_redis_server" {
+  source                   = "./modules/redis_server"
+  docker_image             = "ghcr.io/jesusdalvarado/redis-jesus:latest"
+  service_name             = "redis_server"
+  service_description      = "Redis DB"
+  aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
+  security_group           = aws_security_group.allow_tls.name
+}
+
 module "my_flask_webserver" {
   # Passing values of the variables into the module
   source                   = "./modules/webserver"
@@ -134,15 +143,7 @@ module "my_flask_webserver" {
   service_description      = "Simple web server using Flask"
   aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
   security_group           = aws_security_group.allow_tls.name
-}
-
-module "my_redis_server" {
-  source                   = "./modules/redis_server"
-  docker_image             = "ghcr.io/jesusdalvarado/redis-jesus:latest"
-  service_name             = "redis_server"
-  service_description      = "Redis DB"
-  aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
-  security_group           = aws_security_group.allow_tls.name
+  redis_url                = module.my_redis_server.redis_server.cname
 }
 
 // This is just an example output, reading from the child module. When running terraform apply this output will be printed, it is a way to inspect the values in the console

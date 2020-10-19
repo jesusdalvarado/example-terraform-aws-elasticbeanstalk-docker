@@ -3,6 +3,7 @@ services:
   web:
     image: "ghcr.io/jesusdalvarado/jesus-image:latest"
     ports:
-      - "5000:5000"
-    # volumes:
-    #   - ./:/app # This can cause problems when deploying to EB, it would override the files only copying the docker-compose.yml file which is the only file in the S3 bucket
+      - "80:5000"
+    volumes:
+      - ./.env:/app/.env # Copying .env generated at runtime when creating the webserver module (check webserver/main.tf)
+      # - ./:/app # This can cause problems when deploying to EB, it would override the files only copying the docker-compose.yml file which is the only file in the S3 bucket

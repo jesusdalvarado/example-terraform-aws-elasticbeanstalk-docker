@@ -27,6 +27,14 @@ resource "aws_s3_bucket_object" "object" {
   source    = "modules/webserver/docker-compose.yml"
 }
 
+resource "aws_s3_bucket_object" "env_object" {
+  bucket    = aws_s3_bucket.bucket.bucket
+  key       = ".env"
+  content = jsonencode({
+    REDIS_URL=var.redis_url
+  })
+}
+
 resource "aws_elastic_beanstalk_application_version" "default" {
   name        = "tf-test-version-3"
   application = aws_elastic_beanstalk_application.webserver.name
