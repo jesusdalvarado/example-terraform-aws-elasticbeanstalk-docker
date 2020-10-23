@@ -55,9 +55,9 @@ resource "aws_elastic_beanstalk_application_version" "default" {
 }
 
 resource "aws_elastic_beanstalk_environment" "prodenv" {
-  name                = "production"
+  name                = var.environment_name
   application         = aws_elastic_beanstalk_application.redis_server.name
-  solution_stack_name = "64bit Amazon Linux 2 v3.1.2 running Docker"
+  solution_stack_name = "64bit Amazon Linux 2 v3.2.0 running Docker"
   version_label       = aws_elastic_beanstalk_application_version.default.name
 
   setting {
