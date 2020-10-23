@@ -67,9 +67,9 @@ resource "aws_elastic_beanstalk_environment" "prodenv" {
   }
 
   setting {
-    name = "SecurityGroups"
+    name      = "SecurityGroups"
     namespace = "aws:autoscaling:launchconfiguration"
-    value = var.security_group
+    value     = var.security_group
   }
 }
 
