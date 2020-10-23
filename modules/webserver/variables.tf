@@ -1,8 +1,3 @@
-variable "docker_image" {
-    type        = string
-    description = "This is the image to be deployed in EB"
-}
-
 variable "service_name" {
     type        = string
     description = "Name of the service"

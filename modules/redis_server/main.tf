@@ -21,23 +21,30 @@ resource "aws_s3_bucket" "bucket" {
 // Create release
 // With aws_s3_bucket_object we can upload files to the s3 bucket
 resource "aws_s3_bucket_object" "object" {
-  bucket    = aws_s3_bucket.bucket.bucket
-  key       = "Dockerrun.aws.json"
-  content   = jsonencode({
-    "AWSEBDockerrunVersion": "1",
-    "Image": {
-      # "Name": "docker.pkg.github.com/jesusdalvarado/example-terraform-aws-elasticbeanstalk-docker/jesus-image:v1" // Using Github Package Registry (requires authentication)
-      # "Name": "alvaradojesus/deploying_aws_elastic_beanstalk:v1" // Using docker registry
-      # "Name": "ghcr.io/jesusdalvarado/jesus-image:v1" // Using GitHub Container Registry
-      "Name": var.docker_image // This reads from ./variables.tf. The values in variables.tf are passed from the root main.tf
-    },
-    "Ports": [
-      {
-        "ContainerPort": 6379
-      }
-    ]
-  })
+  bucket = aws_s3_bucket.bucket.bucket
+  key = "docker-compose.yml"
+  source = "modules/redis_server/docker-compose.yml"
 }
+
+// Previous configuration using Docker Run Version 1 (without docker-compose)
+# resource "aws_s3_bucket_object" "object" {
+#   bucket    = aws_s3_bucket.bucket.bucket
+#   key       = "Dockerrun.aws.json"
+#   content   = jsonencode({
+#     "AWSEBDockerrunVersion": "1",
+#     "Image": {
+#       # "Name": "docker.pkg.github.com/jesusdalvarado/example-terraform-aws-elasticbeanstalk-docker/jesus-image:v1" // Using Github Package Registry (requires authentication)
+#       # "Name": "alvaradojesus/deploying_aws_elastic_beanstalk:v1" // Using docker registry
+#       # "Name": "ghcr.io/jesusdalvarado/jesus-image:v1" // Using GitHub Container Registry
+#       "Name": var.docker_image // This reads from ./variables.tf. The values in variables.tf are passed from the root main.tf
+#     },
+#     "Ports": [
+#       {
+#         "ContainerPort": 6379
+#       }
+#     ]
+#   })
+# }
 
 resource "aws_elastic_beanstalk_application_version" "default" {
   name        = "tf-test-version-3"
@@ -64,4 +71,13 @@ resource "aws_elastic_beanstalk_environment" "prodenv" {
     namespace = "aws:autoscaling:launchconfiguration"
     value = var.security_group
   }
+}
+
+data "aws_instance" "ec2" {
+  filter {
+    name      = "tag:Name"
+    values    = [var.environment_name]
+  }
+
+  depends_on  = [aws_elastic_beanstalk_environment.prodenv]
 }

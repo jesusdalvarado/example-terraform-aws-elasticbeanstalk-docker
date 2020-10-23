@@ -1,8 +1,3 @@
-variable "docker_image" {
-    type        = string
-    description = "This is the image to be deployed in EB"
-}
-
 variable "service_name" {
     type        = string
     description = "Name of the service"
@@ -21,4 +16,9 @@ variable "aws_iam_instance_profile" {
 variable "security_group" {
     type        = string
     description = "AWS Security Group"
+}
+
+variable "environment_name" {
+    type = string
+    description = "The name of the EB environment"
 }

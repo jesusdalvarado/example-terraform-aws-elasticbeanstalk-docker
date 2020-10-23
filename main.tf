@@ -127,23 +127,23 @@ resource "aws_security_group" "allow_tls" {
 }
 
 module "my_redis_server" {
+  # Passing values of the variables into the module
   source                   = "./modules/redis_server"
-  docker_image             = "ghcr.io/jesusdalvarado/redis-jesus:latest"
+  # docker_image             = "ghcr.io/jesusdalvarado/redis-jesus:latest"
   service_name             = "redis_server"
   service_description      = "Redis DB"
   aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
   security_group           = aws_security_group.allow_tls.name
+  environment_name         = "production"
 }
 
 module "my_flask_webserver" {
-  # Passing values of the variables into the module
   source                   = "./modules/webserver"
-  docker_image             = "ghcr.io/jesusdalvarado/jesus-image:latest"
   service_name             = "flask_web_server"
   service_description      = "Simple web server using Flask"
   aws_iam_instance_profile = aws_iam_instance_profile.test_profile.name
   security_group           = aws_security_group.allow_tls.name
-  redis_url                = module.my_redis_server.redis_server.cname
+  redis_url                = module.my_redis_server.ec2_redis_instance.public_ip
 }
 
 // This is just an example output, reading from the child module. When running terraform apply this output will be printed, it is a way to inspect the values in the console
@@ -159,6 +159,10 @@ output "webserver_url" {
   value = module.my_flask_webserver.webserver.cname
 }
 
+output "ec2_redis_instance" {
+  value = module.my_redis_server.ec2_redis_instance
+}
+
 output "redis_url" {
-  value = module.my_redis_server.redis_server.cname
+  value = module.my_redis_server.ec2_redis_instance.public_ip
 }

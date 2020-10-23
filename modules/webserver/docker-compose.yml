@@ -4,6 +4,8 @@ services:
     image: "ghcr.io/jesusdalvarado/jesus-image:latest"
     ports:
       - "80:5000"
-    volumes:
-      - ./.env:/app/.env # Copying .env generated at runtime when creating the webserver module (check webserver/main.tf)
+    environment:
+      - REDIS_URL # EB does not display the env var in .env or running env (it is hidden), but if it is in environment properties it can be exposed to the container like this
+    # volumes:
+      # - ./vars.env:/app/vars.env # Copying .env generated at runtime when creating the webserver module (check webserver/main.tf)
       # - ./:/app # This can cause problems when deploying to EB, it would override the files only copying the docker-compose.yml file which is the only file in the S3 bucket
