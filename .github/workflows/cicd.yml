@@ -30,6 +30,9 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - run: |
           echo "Running script to publish images"
           sh test.sh ${{ secrets.GH_PAT }}
