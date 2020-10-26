@@ -40,14 +40,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Publish image
+      # - name: Publish image
         run: |
           echo "Testing 123"
           ls
           echo "-------- 111"
           ls modules/webserver/
           echo "-------- 222"
-          sh test.sh
+          sh test.sh ${{ secrets.GH_PAT }}
 
       # - run: |
       #   docker build ./modules/webserver/ -t jesusdalvarado-example-image:latest
