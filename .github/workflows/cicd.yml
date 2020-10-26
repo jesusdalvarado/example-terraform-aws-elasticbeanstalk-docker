@@ -35,6 +35,8 @@ jobs:
           sh test.sh ${{ secrets.GH_PAT }}
 
   deploy:
+    name: Deploy
+    runs-on: ubuntu-20.04
     needs: push_images
 
     steps:
