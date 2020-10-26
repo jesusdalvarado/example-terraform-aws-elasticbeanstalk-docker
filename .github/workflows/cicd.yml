@@ -37,7 +37,7 @@ jobs:
           ls
           echo "-------"
           ls ./modules/webserver
-          echo "--------""
+          echo "--------"
           echo "Running script to publish images"
           sh publish_images.sh ${{ secrets.GH_PAT }}
 
