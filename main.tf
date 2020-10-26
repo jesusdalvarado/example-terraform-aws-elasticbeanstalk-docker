@@ -14,11 +14,6 @@ terraform {
   }
 }
 
-variable "AWS_REGION" {
-  # default = "us-west-2"
-  type = string
-}
-
 provider "aws" {
   profile = "default"
   region  = var.AWS_REGION
