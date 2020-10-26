@@ -43,6 +43,10 @@ jobs:
       - name: Publish image
         run: |
           echo "Testing 123"
+          ls
+          echo "--------"
+          ls modules/webserver/
+          echo "--------"
           sh test.sh
 
       # - run: |
