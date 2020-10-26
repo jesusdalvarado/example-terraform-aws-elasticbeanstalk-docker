@@ -40,8 +40,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Build the stack
-        run: docker-compose -f docker-compose.yml up -d
+      - run: |
+        docker build ./modules/webserver/ -t jesusdalvarado-example-image:latest
+        echo "{{ secrets.GH_PAT }}" | docker login ghcr.io -u jesusdalvarado --password-stdin
+        docker tag jesusdalvarado-example-image:latest ghcr.io/jesusdalvarado/jesus-image:latest
+        docker push ghcr.io/jesusdalvarado/jesus-image:latest
+
+      # - name: Build the stack
+      #   run: docker-compose -f docker-compose.yml up -d
       # - run: |
       #   echo "{{ secrets.DOCKERHUB_PASSWORD }}" | docker login https://docker.pkg.github.com -u "${{ secrets.DOCKERHUB_USENAME }}" --password-stdin
       #   echo "hello"
