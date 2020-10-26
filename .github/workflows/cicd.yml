@@ -44,9 +44,9 @@ jobs:
         run: |
           echo "Testing 123"
           ls
-          echo "--------"
+          echo "-------- 111"
           ls modules/webserver/
-          echo "--------"
+          echo "-------- 222"
           sh test.sh
 
       # - run: |
