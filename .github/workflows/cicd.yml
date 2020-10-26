@@ -34,12 +34,8 @@ jobs:
         uses: actions/checkout@v2
 
       - run: |
-          ls
-          echo "-------"
-          ls ./modules/webserver
-          echo "--------"
           echo "Running script to publish images"
-          sh publish_images.sh ${{ secrets.AWS_REGION }}
+          sh publish_images.sh "{{ secrets.GH_PAT }}"
 
   deploy:
     name: Deploy
