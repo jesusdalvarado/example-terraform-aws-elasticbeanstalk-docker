@@ -41,7 +41,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       # - name: Publish image
-        run: |
+      - run: |
           echo "Testing 123"
           ls
           echo "-------- 111"
