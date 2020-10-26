@@ -40,11 +40,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - run: |
-        docker build ./modules/webserver/ -t jesusdalvarado-example-image:latest
-        echo "{{ secrets.GH_PAT }}" | docker login ghcr.io -u jesusdalvarado --password-stdin
-        docker tag jesusdalvarado-example-image:latest ghcr.io/jesusdalvarado/jesus-image:latest
-        docker push ghcr.io/jesusdalvarado/jesus-image:latest
+      - name: Publish image
+        run: |
+          echo "Testing 123"
+          sh test.sh
+
+      # - run: |
+      #   docker build ./modules/webserver/ -t jesusdalvarado-example-image:latest
+      #   echo "{{ secrets.GH_PAT }}" | docker login ghcr.io -u jesusdalvarado --password-stdin
+      #   docker tag jesusdalvarado-example-image:latest ghcr.io/jesusdalvarado/jesus-image:latest
+      #   docker push ghcr.io/jesusdalvarado/jesus-image:latest
 
       # - name: Build the stack
       #   run: docker-compose -f docker-compose.yml up -d
