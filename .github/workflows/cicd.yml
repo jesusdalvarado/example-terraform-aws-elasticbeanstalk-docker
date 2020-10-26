@@ -55,7 +55,7 @@ jobs:
 
       - name: Create Terraform resources
         run: |
-          terraform destroy --auto-approve && terraform apply --auto-approve
+          terraform init -reconfigure && terraform destroy --auto-approve && terraform apply --auto-approve
 
 
 
