@@ -39,7 +39,7 @@ jobs:
           ls ./modules/webserver
           echo "--------"
           echo "Running script to publish images"
-          sh publish_images.sh
+          sh publish_images.sh ${{ secrets.AWS_REGION }}
 
   deploy:
     name: Deploy
