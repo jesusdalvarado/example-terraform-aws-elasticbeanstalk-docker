@@ -35,7 +35,7 @@ jobs:
 
       - run: |
           echo "Running script to publish images"
-          sh publish_images.sh "{{ secrets.GH_PAT }}"
+          sh publish_images.sh ${{ secrets.GH_PAT }}
 
   deploy:
     name: Deploy
