@@ -27,11 +27,15 @@ This is an example application built using Terraform to create the resources in 
 <h1>Getting Started</h1>
 
 <h2>To create resources in AWS using Terraform</h2>
+You can create resources by runing Terraform locally using the terraform service declared in ./docker-compose.yml, or you could just push to create them using GitHub actions which will run the workflow located in .github/workflows/cicd.yml.
+Please note the Terraform version in the docker image and the version set in the workflow can be different.
+
+<h2>Terraform useful commands to create resources</h2>
 
 1. Run terraform init
 2. Run terraform plan
 3. Run terraform apply
-4. After the resoruces are created you can go to the url provided by Elastic Beasntalk for the webserver app  and you should see the message "Hello World! I have been seen {n} times."
+4. After the resources are created you can go to the url provided by Elastic Beasntalk for the webserver app  and you should see the message "Hello World! I have been seen {n} times."
 
 <h2>CICD</h2>
 To use CICD you need to configure these secrets in GitHub
